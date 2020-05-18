@@ -165,7 +165,12 @@ class MainWindow(QWidget):
         devices = item.members()
         self.device_list.clear()
 
+        # determine shared state and add devices to list
         state = False
+        color_temp = False
+        min_color = 10000
+        max_color = 0
+        color = []
         brightness = []
         for d in devices:
             device = self.api(d)
@@ -177,6 +182,11 @@ class MainWindow(QWidget):
                         brightness.append(device.light_control.lights[0].dimmer)
                     else:
                         brightness.append(0)
+                if device.light_control.can_set_temp:
+                    color_temp = True
+                    min_color = min(min_color, device.light_control.min_mireds)
+                    max_color = max(max_color, device.light_control.max_mireds)
+                    color.append(device.light_control.lights[0].color_temp)
             list_item = QListWidgetItem(device.name, self.device_list)
             setattr(list_item, 'api_item', device)
 
@@ -185,6 +195,12 @@ class MainWindow(QWidget):
         else:
             brightness = 0
 
+        if len(color) > 0:
+            color = int(sum(color) / len(color))
+        else:
+            color = min_color
+
+        # enable device list and controls
         self.device_list.setEnabled(True)
 
         self.group_brightness_slider.setEnabled(True)
@@ -192,6 +208,15 @@ class MainWindow(QWidget):
         self.group_brightness_slider.setMaximum(254)
         self.group_brightness_slider.setSingleStep(16)
         self.group_brightness_slider.setValue(brightness)
+
+        if color_temp:
+            self.group_color_slider.setEnabled(True)
+            self.group_color_slider.setMinimum(min_color)
+            self.group_color_slider.setMaximum(max_color)
+            self.group_color_slider.setSingleStep(int((max_color - min_color) / 10))
+            self.group_color_slider.setValue(color)
+        else:
+            self.group_color_slider.setEnabled(False)
 
         self.group_toggle.setEnabled(True)
         try:
@@ -204,7 +229,6 @@ class MainWindow(QWidget):
         self.brightness_slider.setEnabled(False)
         self.color_slider.setEnabled(False)
         self.device_toggle.setEnabled(False)
-
 
     def device_selected(self):
         current_item = self.device_list.currentItem()
@@ -274,6 +298,10 @@ class MainWindow(QWidget):
         if current_item is None:
             return
         item = getattr(current_item, 'api_item', None)
+
+        command = item.set_color_temp(self.group_color_slider.value(), transition_time=2)
+
+        self.queue_command('group_color', command)
 
     def brightness_changed(self):
         current_item = self.device_list.currentItem()
