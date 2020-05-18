@@ -59,8 +59,9 @@ class MainWindow(QWidget):
         group_frame = QGroupBox("Device Groups")
         group_frame.setLayout(QVBoxLayout())
         self.group_list = QListWidget()
-        self.group_list.itemActivated.connect(self.group_selected)
-        vbox3.addWidget(self.group_list)
+        self.group_list.itemPressed.connect(self.group_selected)
+        group_frame.layout().addWidget(self.group_list)
+        vbox3.addWidget(group_frame)
 
         # Sliders
         self.group_toggle = QCheckBox("Power")
@@ -87,7 +88,7 @@ class MainWindow(QWidget):
         device_frame.setLayout(QVBoxLayout())
         self.device_list = QListWidget()
         self.device_list.setEnabled(False)
-        self.device_list.itemActivated.connect(self.device_selected)
+        self.device_list.itemPressed.connect(self.device_selected)
         device_frame.layout().addWidget(self.device_list)
         vbox2.addWidget(device_frame)
 
