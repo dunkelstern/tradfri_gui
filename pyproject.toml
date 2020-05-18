@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "tradfri-gui"
+version = "0.1.0"
+description = "Tradfri GUI for Desktops based on PyTradrfi and PySide2/Qt"
+authors = ["Johannes Schriewer <hallo@dunkelstern.de>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.6,<3.9"
+pyside2 = "^5.14.2"
+pytradfri = { git = "https://github.com/ggravlingen/pytradfri.git", branch="master"}
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.5.2"
+mypy = "^0.770"
+pywin32 = "^227"
+pywin32-ctypes = "^0.2.0"
+pyinstaller = "^3.6"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
