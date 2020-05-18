@@ -1,0 +1,15 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/dist": true,
+        "**/build": true
+    },
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=PySide2",
+        "--disable=missing-module-docstring"
+    ]
+}
