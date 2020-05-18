@@ -141,6 +141,9 @@ class MainWindow(QWidget):
         item = getattr(current_item, 'api_item', None)
         if item is None:
             return
+        # refresh from gateway
+        item = self.api(self.gateway.get_group(item.id))
+
         devices = item.members()
         self.device_list.clear()
 
@@ -190,7 +193,10 @@ class MainWindow(QWidget):
         item = getattr(current_item, 'api_item', None)
         if item is None:
             return
+        # refresh from gateway
+        item = self.api(self.gateway.get_device(item.id))
 
+        # enable appropriate controls
         if item.has_light_control:
             ctrl = item.light_control
             if ctrl.can_set_dimmer:
