@@ -66,7 +66,6 @@ class MainWindow(QWidget):
         # Sliders
         self.group_toggle = QCheckBox("Power")
         self.group_toggle.setEnabled(False)
-        self.group_toggle.stateChanged.connect(self.group_toggled)
         vbox3.addWidget(self.group_toggle)
         vbox3.addWidget(QLabel("Brightness"))
         self.group_brightness_slider = QSlider(Qt.Orientation.Horizontal)
@@ -95,7 +94,6 @@ class MainWindow(QWidget):
         # Sliders
         self.device_toggle = QCheckBox("Power")
         self.device_toggle.setEnabled(False)
-        self.device_toggle.stateChanged.connect(self.device_toggled)
         vbox2.addWidget(self.device_toggle)
         vbox2.addWidget(QLabel("Brightness"))
         self.brightness_slider = QSlider(Qt.Orientation.Horizontal)
@@ -175,7 +173,12 @@ class MainWindow(QWidget):
         self.group_brightness_slider.setValue(brightness)
 
         self.group_toggle.setEnabled(True)
+        try:
+            self.group_toggle.stateChanged.disconnect(self.group_toggled)
+        except RuntimeError:
+            pass  # Disconnect failed because nothing was connected
         self.group_toggle.setCheckState(Qt.CheckState.Checked if state else Qt.CheckState.Unchecked)
+        self.group_toggle.stateChanged.connect(self.group_toggled)
 
         self.brightness_slider.setEnabled(False)
         self.color_slider.setEnabled(False)
@@ -207,7 +210,12 @@ class MainWindow(QWidget):
             else:
                 self.color_slider.setEnabled(False)
             self.device_toggle.setEnabled(True)
+            try:
+                self.device_toggle.stateChanged.disconnect(self.device_toggled)
+            except RuntimeError:
+                pass  # disconnect failed because nothing was connected
             self.device_toggle.setCheckState(Qt.CheckState.Checked if ctrl.lights[0].state else Qt.CheckState.Unchecked)
+            self.device_toggle.stateChanged.connect(self.device_toggled)
         else:
             self.brightness_slider.setEnabled(False)
             self.color_slider.setEnabled(False)
