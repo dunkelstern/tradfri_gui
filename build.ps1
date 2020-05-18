@@ -3,3 +3,4 @@ pyinstaller --name="TradfriGUI" --windowed --onedir --noupx -y src\main.py
 Copy-Item "bin\*.dll" ".\dist\TradfriGUI\"
 Copy-Item "bin\*.exe" ".\dist\TradfriGUI\"
 Copy-Item -Recurse "icons" ".\dist\TradfriGUI\"
+makensis /X"SetCompressor /FINAL lzma" installer.nsis
