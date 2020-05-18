@@ -80,6 +80,15 @@ class MainWindow(QWidget):
 
         self.hbox.addLayout(vbox3)
 
+        # moods
+        mood_frame = QGroupBox("Moods")
+        mood_frame.setLayout(QVBoxLayout())
+        self.mood_list = QListWidget()
+        self.mood_list.itemPressed.connect(self.mood_selected)
+        mood_frame.layout().addWidget(self.mood_list)
+
+        self.hbox.addWidget(mood_frame)
+
         # Devices in group
         vbox2 = QVBoxLayout()
 
@@ -144,6 +153,15 @@ class MainWindow(QWidget):
         # refresh from gateway
         item = self.api(self.gateway.get_group(item.id))
 
+        # load moods
+        self.mood_list.clear()
+        moods = self.api(item.moods())
+        for m in moods:
+            mood = self.api(m)
+            list_item = QListWidgetItem(mood.name, self.mood_list)
+            setattr(list_item, 'api_item', mood)
+
+        # load devices
         devices = item.members()
         self.device_list.clear()
 
@@ -226,6 +244,21 @@ class MainWindow(QWidget):
             self.brightness_slider.setEnabled(False)
             self.color_slider.setEnabled(False)
             self.device_toggle.setEnabled(False)
+
+    def mood_selected(self):
+        current_group = self.group_list.currentItem()
+        group = getattr(current_group, 'api_item', None)
+        if group is None:
+            return
+        # refresh from gateway
+        group = self.api(self.gateway.get_group(group.id))
+
+        current_mood = self.mood_list.currentItem()
+        mood = getattr(current_mood, 'api_item', None)
+        if mood is None:
+            return
+
+        self.api(group.activate_mood(mood.id))
 
     def group_brightness_changed(self):
         current_item = self.group_list.currentItem()
