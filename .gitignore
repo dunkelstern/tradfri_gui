@@ -3,3 +3,4 @@ dist/
 *.spec
 *.py[cdo]
 **/.mypy_cache
+.venv/
