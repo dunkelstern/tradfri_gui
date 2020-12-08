@@ -135,6 +135,9 @@ class MainWindow(QWidget):
         self.device_list.clear()
         self.group_list.clear()
 
+        if self.api is None:
+            return
+
         groups = self.api(self.gateway.get_groups())
         if len(groups) == 0:
             self.group_list.setEnabled(False)
