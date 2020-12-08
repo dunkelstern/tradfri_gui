@@ -2,6 +2,8 @@
 
 Simple Qt based Tradfri GUI implemented in Python.
 
+![Screenshot](screenshot.png)
+
 ## Requirements
 
 ### Running
