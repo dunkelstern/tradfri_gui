@@ -31,15 +31,25 @@ Simple Qt based Tradfri GUI implemented in Python.
 1. Make sure you have NSIS installed.
 2. Make sure you have a Version of Python>=3.6 installed (Not the Microsoft Store Version!)
 3. Install `poetry`: `pip install poetry`
-4. Create a virtualenv: `poetry install --dev`
+4. Create a virtualenv: `poetry install`
 5. Run the build script: `./build.ps1`
 
 The build script will create an installation in `dist/TradfriGUI` and an installer file in `dist`
 
 ### Linux
 
-TODO
+1. Create virtualenv `python -m venv .venv`
+2. Activate virtualenv `. .venv/bin/activate`
+3. Install `poetry`: `pip install poetry`
+4. Install dependencies: `poetry install`
+5. Install `coap-client` and `libcoap`:
+    - Archlinux: See AUR https://aur.archlinux.org/packages/libcoap-git/
+    - Ubuntu: `libcoap`
+6. Either run directly:
+    - `python src/main.py`
+7. Or build distribution:
+    - `./build.sh [--onefile|--onedir]`
 
 ### Mac OS
 
-TODO
+Should work like on Linux, you may need to fetch `libcoap` and `coap-client` from Homebrew
